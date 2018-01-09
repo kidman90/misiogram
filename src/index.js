@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Theme as UWPThemeProvider, getTheme } from 'react-uwp/Theme';
 import Misiogram from './Misiogram';
 import registerServiceWorker from './registerServiceWorker';
 
-export class App extends React.Component {
+export class App extends Component {
   render() {
     return (
       <UWPThemeProvider
