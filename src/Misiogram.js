@@ -10,7 +10,8 @@ export default class Misiogram extends Component {
     this.state = {
       guessed: this.generateGuessed(props.message),
       guessingIndex: this.generateIndex(props.message),
-      message: props.message.toUpperCase().split('')
+      message: props.message.toUpperCase().split(''),
+      remaining: this.countRemainingLetters(props.message)
     };
   }
 
@@ -39,11 +40,24 @@ export default class Misiogram extends Component {
   };
 
   nextIndex = () => {
+    if (this.state.remaining === 0) return null;
     let index = Math.floor(Math.random() * this.state.message.length);
     if (index === this.state.guessingIndex || this.state.message[index] === ' ' || typeof this.state.guessed[index] === 'string') {
       index = this.nextIndex();
     }
     return index;
+  };
+
+  countRemainingLetters = (message) => {
+    return message
+      .split('')
+      .reduce(function (total, letter) {
+        if (letter !== ' ') {
+          return total;
+        } else {
+          return total - 1;
+        }
+      }, message.split('').length);
   };
 
   guess = e => {
@@ -54,7 +68,8 @@ export default class Misiogram extends Component {
           e.key.toUpperCase(),
           ...this.state.guessed.slice(this.state.guessingIndex + 1)
         ],
-        guessingIndex: this.nextIndex()
+        guessingIndex: this.nextIndex(),
+        remaining: this.state.remaining - 1
       });
     }
   };
