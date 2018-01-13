@@ -12,19 +12,25 @@ export default class Misiogram extends Component {
   render() {
     const { theme } = this.context;
     const message = this.props.message.split('');
+    const { letterMargin } = this.props;
+    const letterSize = `100vw / ${message.length + 2}`;
 
     const rootStyle = theme.prefixStyle({
       display: 'flex',
       alignItems: 'center',
       height: '100vh',
-      padding: `calc(100vw / ${message.length + 2}`
+      padding: `calc(${letterSize})`
     });
     const buttonStyle = theme.prefixStyle({
       flex: 1,
-      fontSize: `calc(100vw / ${message.length} / 3)`,
       background: theme.acrylicTexture80.background,
       borderColor: theme.baseLow,
-      height: `calc(100vw / ${message.length + 2})`
+      fontSize: `calc(${letterSize} / 2)`,
+      height: `calc(${letterSize} - ${letterMargin * 2}px)`,
+      minHeight: 32,
+      minWidth: 32,
+      margin: letterMargin,
+      padding: 0
     });
 
     const letters = message

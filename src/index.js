@@ -5,6 +5,11 @@ import Misiogram from './Misiogram';
 import registerServiceWorker from './registerServiceWorker';
 
 export class App extends Component {
+  config = {
+    message: 'KOCHAM CIĘ JULITKO',
+    letterMargin: 5
+  };
+
   render() {
     return (
       <UWPThemeProvider
@@ -15,7 +20,7 @@ export class App extends Component {
           desktopBackgroundImage: './img/background.jpg'
         })}
       >
-        <Misiogram message="KOCHAM CIĘ JULITKO" />
+        <Misiogram {...this.config} />
       </UWPThemeProvider>
     );
   }
