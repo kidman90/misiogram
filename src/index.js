@@ -12,10 +12,10 @@ export class App extends Component {
           themeName: 'dark',
           accent: '#0078D7',
           useFluentDesign: true,
-          desktopBackgroundImage: './img/01.jpg'
+          desktopBackgroundImage: './img/background.jpg'
         })}
       >
-        <Misiogram />
+        <Misiogram message="KOCHAM CIĘ JULITKO" />
       </UWPThemeProvider>
     );
   }
