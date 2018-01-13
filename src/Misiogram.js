@@ -5,15 +5,30 @@ import Button from 'react-uwp/Button';
 export default class Misiogram extends Component {
   static contextTypes = { theme: PropTypes.object };
 
-  // constructor(props) {
-  //   super(props);
-  // }
+  constructor(props) {
+    super(props);
+    this.state = {
+      guessed: this.generateGuessed(props.message)
+    };
+  }
+
+  generateGuessed = message => {
+    return message
+      .split('')
+      .map(letter => {
+        if (letter === ' ') {
+          return letter;
+        } else {
+          return <span style={{ fontFamily: 'icofont' }}>&#xef7e;</span>;
+        }
+      });
+  };
 
   render() {
     const { theme } = this.context;
-    const message = this.props.message.split('');
+    const { guessed } = this.state;
     const { letterMargin } = this.props;
-    const letterSize = `100vw / ${message.length + 2}`;
+    const letterSize = `100vw / ${guessed.length + 2}`;
 
     const rootStyle = theme.prefixStyle({
       display: 'flex',
@@ -34,7 +49,7 @@ export default class Misiogram extends Component {
       padding: 0
     });
 
-    const letters = message
+    const letters = guessed
       .map((letter, index) => {
         return <Button
           key={index}
