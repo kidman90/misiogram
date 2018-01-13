@@ -9,7 +9,7 @@ export default class Misiogram extends Component {
     super(props);
     this.state = {
       guessed: this.generateGuessed(props.message),
-      guessingIndex: 0
+      guessingIndex: this.generateIndex(props.message)
     };
   }
 
@@ -25,12 +25,20 @@ export default class Misiogram extends Component {
       });
   };
 
+  generateIndex = message => {
+    let index = Math.floor(Math.random() * message.split('').length);
+    if (message.split('')[index] === ' ') {
+      index = this.generateIndex(message);
+    }
+    return index;
+  };
+
   handleClick = index => {
     this.setState({ guessingIndex: index });
   };
 
   render() {
-    const { theme } = this.context; console.log(theme);
+    const { theme } = this.context;
     const { guessed, guessingIndex } = this.state;
     const { letterMargin } = this.props;
     const letterSize = `100vw / ${guessed.length + 2}`;
