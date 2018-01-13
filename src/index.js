@@ -15,7 +15,7 @@ export class App extends Component {
       <UWPThemeProvider
         theme={getTheme({
           themeName: 'dark',
-          accent: '#0078D7',
+          accent: '#FFC600',
           useFluentDesign: true,
           desktopBackgroundImage: './img/background.jpg'
         })}

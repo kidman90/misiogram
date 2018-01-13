@@ -8,7 +8,8 @@ export default class Misiogram extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      guessed: this.generateGuessed(props.message)
+      guessed: this.generateGuessed(props.message),
+      guessingIndex: 0
     };
   }
 
@@ -24,9 +25,13 @@ export default class Misiogram extends Component {
       });
   };
 
+  handleClick = index => {
+    this.setState({ guessingIndex: index });
+  };
+
   render() {
-    const { theme } = this.context;
-    const { guessed } = this.state;
+    const { theme } = this.context; console.log(theme);
+    const { guessed, guessingIndex } = this.state;
     const { letterMargin } = this.props;
     const letterSize = `100vw / ${guessed.length + 2}`;
 
@@ -39,7 +44,6 @@ export default class Misiogram extends Component {
     const buttonStyle = theme.prefixStyle({
       flex: 1,
       background: theme.acrylicTexture80.background,
-      borderColor: theme.baseLow,
       fontSize: `calc(${letterSize} / 2)`,
       textTransform: 'uppercase',
       height: `calc(${letterSize} - ${letterMargin * 2}px)`,
@@ -55,8 +59,10 @@ export default class Misiogram extends Component {
           key={index}
           style={{
             ...buttonStyle,
-            visibility: (letter === ' ') ? 'hidden' : 'visible'
+            visibility: (letter === ' ') ? 'hidden' : 'visible',
+            borderColor: (index === guessingIndex) ? theme.accent : theme.baseLow
           }}
+          onClick={() => this.handleClick(index)}
         >
           {letter}
         </Button>;
