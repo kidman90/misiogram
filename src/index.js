@@ -6,8 +6,8 @@ import registerServiceWorker from './registerServiceWorker';
 
 export class App extends Component {
   config = {
-    message: 'KOCHAM CIĘ JULITKO',
-    letterMargin: 5
+    message: 'Kocham Cię Julitko',
+    // letterMargin: 5
   };
 
   render() {

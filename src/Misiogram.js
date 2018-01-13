@@ -26,6 +26,7 @@ export default class Misiogram extends Component {
       background: theme.acrylicTexture80.background,
       borderColor: theme.baseLow,
       fontSize: `calc(${letterSize} / 2)`,
+      textTransform: 'uppercase',
       height: `calc(${letterSize} - ${letterMargin * 2}px)`,
       minHeight: 32,
       minWidth: 32,
@@ -53,3 +54,13 @@ export default class Misiogram extends Component {
     );
   }
 }
+
+Misiogram.defaultProps = {
+  message: 'Kocham Cię',
+  letterMargin: 5
+};
+
+Misiogram.propTypes = {
+  message: PropTypes.string,
+  letterMargin: PropTypes.number
+};
