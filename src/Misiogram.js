@@ -9,8 +9,13 @@ export default class Misiogram extends Component {
     super(props);
     this.state = {
       guessed: this.generateGuessed(props.message),
-      guessingIndex: this.generateIndex(props.message)
+      guessingIndex: this.generateIndex(props.message),
+      message: props.message.toUpperCase().split('')
     };
+  }
+
+  componentDidMount() {
+    window.addEventListener('keydown', this.guess);
   }
 
   generateGuessed = message => {
@@ -33,6 +38,18 @@ export default class Misiogram extends Component {
     return index;
   };
 
+  guess = e => {
+    if (e.key.toUpperCase() === this.state.message[this.state.guessingIndex]) {
+      this.setState({
+        guessed: [
+          ...this.state.guessed.slice(0, this.state.guessingIndex),
+          e.key.toUpperCase(),
+          ...this.state.guessed.slice(this.state.guessingIndex + 1)
+        ]
+      });
+    }
+  };
+
   handleClick = index => {
     this.setState({ guessingIndex: index });
   };
@@ -53,7 +70,6 @@ export default class Misiogram extends Component {
       flex: 1,
       background: theme.acrylicTexture80.background,
       fontSize: `calc(${letterSize} / 2)`,
-      textTransform: 'uppercase',
       height: `calc(${letterSize} - ${letterMargin * 2}px)`,
       minHeight: 32,
       minWidth: 32,
