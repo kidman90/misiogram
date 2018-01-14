@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as _ from 'lodash';
+import Sound from 'react-sound';
 import Button from 'react-uwp/Button';
 
 export default class Misiogram extends Component {
@@ -19,7 +20,10 @@ export default class Misiogram extends Component {
       message,
       guessed: this.generateGuessed(message),
       guessingIndex: _.first(remainingIndexes),
-      remainingIndexes
+      remainingIndexes,
+      downSound: 'STOPPED',
+      upSound: 'STOPPED',
+      fanfareSound: 'STOPPED'
     };
   }
 
@@ -39,9 +43,22 @@ export default class Misiogram extends Component {
   };
 
   guess = e => {
-    if (this.state.remainingIndexes.length
-      && e.key.toUpperCase() === this.state.message[this.state.guessingIndex]) {
+    if (!this.state.remainingIndexes.length) return;
+
+    if (e.key.toUpperCase() === this.state.message[this.state.guessingIndex]) {
       const remainingIndexes = _.remove(this.state.remainingIndexes, index => index !== this.state.guessingIndex);
+      let sounds = {};
+      if (!remainingIndexes.length) {
+        sounds = {
+          upSound: 'STOPPED',
+          fanfareSound: 'PLAYING'
+        };
+      } else {
+        sounds = {
+          downSound: 'STOPPED',
+          upSound: 'PLAYING'
+        };
+      }
       this.setState({
         guessed: [
           ...this.state.guessed.slice(0, this.state.guessingIndex),
@@ -49,13 +66,23 @@ export default class Misiogram extends Component {
           ...this.state.guessed.slice(this.state.guessingIndex + 1)
         ],
         guessingIndex: _.first(remainingIndexes),
-        remainingIndexes
+        remainingIndexes,
+        ...sounds
+      });
+    } else {
+      this.setState({
+        downSound: 'PLAYING',
+        upSound: 'STOPPED'
       });
     }
   };
 
   handleClick = index => {
-    this.setState({ guessingIndex: index });
+    this.setState({
+      guessingIndex: index,
+      downSound: 'STOPPED',
+      upSound: 'STOPPED'
+    });
   };
 
   render() {
@@ -99,6 +126,21 @@ export default class Misiogram extends Component {
     return (
       <div style={rootStyle}>
         {letters}
+        <Sound
+          url="./sounds/down.wav"
+          playStatus={this.state.downSound}
+          onFinishedPlaying={(() => this.setState({ downSound: 'STOPPED' }))}
+        />
+        <Sound
+          url="./sounds/up.wav"
+          playStatus={this.state.upSound}
+          onFinishedPlaying={(() => this.setState({ upSound: 'STOPPED' }))}
+        />
+        <Sound
+          url="./sounds/fanfare.mp3"
+          playStatus={this.state.fanfareSound}
+          onFinishedPlaying={(() => this.setState({ fanfareSound: 'STOPPED' }))}
+        />
       </div>
     );
   }

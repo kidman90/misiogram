@@ -17,7 +17,7 @@ export class App extends Component {
           themeName: 'dark',
           accent: '#FFC600',
           useFluentDesign: true,
-          desktopBackgroundImage: './img/background.jpg'
+          desktopBackgroundImage: './background.jpg'
         })}
       >
         <Misiogram {...this.config} />
