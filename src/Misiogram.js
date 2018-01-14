@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import * as _ from 'lodash';
 import Button from 'react-uwp/Button';
 
 export default class Misiogram extends Component {
@@ -7,11 +8,18 @@ export default class Misiogram extends Component {
 
   constructor(props) {
     super(props);
+
+    const message = props.message.toUpperCase().split('');
+    const remainingIndexes = _.shuffle(message
+      .map((letter, index) => index)
+      .filter(index => message[index] !== ' ')
+    );
+
     this.state = {
-      guessed: this.generateGuessed(props.message),
-      guessingIndex: this.generateIndex(props.message),
-      message: props.message.toUpperCase().split(''),
-      remaining: this.countRemainingLetters(props.message)
+      message,
+      guessed: this.generateGuessed(message),
+      guessingIndex: _.first(remainingIndexes),
+      remainingIndexes
     };
   }
 
@@ -21,7 +29,6 @@ export default class Misiogram extends Component {
 
   generateGuessed = message => {
     return message
-      .split('')
       .map(letter => {
         if (letter === ' ') {
           return letter;
@@ -31,45 +38,18 @@ export default class Misiogram extends Component {
       });
   };
 
-  generateIndex = message => {
-    let index = Math.floor(Math.random() * message.split('').length);
-    if (message.split('')[index] === ' ') {
-      index = this.generateIndex(message);
-    }
-    return index;
-  };
-
-  nextIndex = () => {
-    if (this.state.remaining === 0) return null;
-    let index = Math.floor(Math.random() * this.state.message.length);
-    if (index === this.state.guessingIndex || this.state.message[index] === ' ' || typeof this.state.guessed[index] === 'string') {
-      index = this.nextIndex();
-    }
-    return index;
-  };
-
-  countRemainingLetters = (message) => {
-    return message
-      .split('')
-      .reduce(function (total, letter) {
-        if (letter !== ' ') {
-          return total;
-        } else {
-          return total - 1;
-        }
-      }, message.split('').length);
-  };
-
   guess = e => {
-    if (e.key.toUpperCase() === this.state.message[this.state.guessingIndex]) {
+    if (this.state.remainingIndexes.length
+      && e.key.toUpperCase() === this.state.message[this.state.guessingIndex]) {
+      const remainingIndexes = _.remove(this.state.remainingIndexes, index => index !== this.state.guessingIndex);
       this.setState({
         guessed: [
           ...this.state.guessed.slice(0, this.state.guessingIndex),
           e.key.toUpperCase(),
           ...this.state.guessed.slice(this.state.guessingIndex + 1)
         ],
-        guessingIndex: this.nextIndex(),
-        remaining: this.state.remaining - 1
+        guessingIndex: _.first(remainingIndexes),
+        remainingIndexes
       });
     }
   };
