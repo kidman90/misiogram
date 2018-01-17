@@ -30,6 +30,7 @@ export default class Misiogram extends Component {
 
   componentDidMount() {
     window.addEventListener('keydown', this.guess);
+    speechSynthesis.speak(new SpeechSynthesisUtterance(this.props.speeches.intro));
   }
 
   generateGuessed = message => {
@@ -54,11 +55,13 @@ export default class Misiogram extends Component {
           upSound: 'STOPPED',
           fanfareSound: 'PLAYING'
         };
+        speechSynthesis.speak(new SpeechSynthesisUtterance(this.props.speeches.outro));
       } else {
         sounds = {
           downSound: 'STOPPED',
           upSound: 'PLAYING'
         };
+        speechSynthesis.speak(new SpeechSynthesisUtterance(_.sample(this.props.speeches.correct)));
       }
       this.setState({
         guessed: [
@@ -75,6 +78,7 @@ export default class Misiogram extends Component {
         downSound: 'PLAYING',
         upSound: 'STOPPED'
       });
+      speechSynthesis.speak(new SpeechSynthesisUtterance(_.sample(this.props.speeches.incorrect)));
     }
   };
 
