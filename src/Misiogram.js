@@ -69,7 +69,7 @@ export default class Misiogram extends Component {
         remainingIndexes,
         ...sounds
       });
-    } else {
+    } else if ((e.keyCode >= 48 && e.keyCode <= 90) || e.keyCode >= 186) {
       this.setState({
         downSound: 'PLAYING',
         upSound: 'STOPPED'
