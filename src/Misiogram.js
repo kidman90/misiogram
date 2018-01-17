@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import * as _ from 'lodash';
 import Sound from 'react-sound';
 import Button from 'react-uwp/Button';
+import './Misiogram.css';
 
 export default class Misiogram extends Component {
   static contextTypes = { theme: PropTypes.object };

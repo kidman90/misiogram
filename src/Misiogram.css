@@ -1,0 +1,8 @@
+@font-face {
+  font-family: "icofont";
+  src: url("icofont.woff") format("woff");
+}
+/* temporary solution until the hoverStyle prop is not working */
+button:hover {
+  border-color: #FFC600 !important;
+}
