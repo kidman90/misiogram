@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as _ from 'lodash';
+import BrowserDetection from 'react-browser-detection';
 import Sound from 'react-sound';
 import Button from 'react-uwp/Button';
 import './Misiogram.css';
@@ -96,7 +97,8 @@ export default class Misiogram extends Component {
       display: 'flex',
       alignItems: 'center',
       height: '100vh',
-      padding: `calc(${letterSize})`
+      padding: `calc(${letterSize})`,
+      overflow: 'hidden'
     });
     const buttonStyle = theme.prefixStyle({
       flex: 1,
@@ -123,27 +125,42 @@ export default class Misiogram extends Component {
           {letter}
         </Button>;
       });
+    const browserHandler = {
+      chrome: () => (
+        <div style={rootStyle}>
+          {letters}
+          <Sound
+            url="./sounds/down.wav"
+            playStatus={this.state.downSound}
+            onFinishedPlaying={(() => this.setState({ downSound: 'STOPPED' }))}
+          />
+          <Sound
+            url="./sounds/up.wav"
+            playStatus={this.state.upSound}
+            onFinishedPlaying={(() => this.setState({ upSound: 'STOPPED' }))}
+          />
+          <Sound
+            url="./sounds/fanfare.mp3"
+            playStatus={this.state.fanfareSound}
+            onFinishedPlaying={(() => this.setState({ fanfareSound: 'STOPPED' }))}
+          />
+        </div>
+      ),
+      default: () => (
+        <div style={rootStyle}>
+          <Button style={{
+            ...buttonStyle,
+            borderColor: theme.accent,
+            height: 'auto',
+            padding: 5
+          }}>
+            Misiować można tylko na Chromie!
+          </Button>
+        </div>
+      )
+    };
 
-    return (
-      <div style={rootStyle}>
-        {letters}
-        <Sound
-          url="./sounds/down.wav"
-          playStatus={this.state.downSound}
-          onFinishedPlaying={(() => this.setState({ downSound: 'STOPPED' }))}
-        />
-        <Sound
-          url="./sounds/up.wav"
-          playStatus={this.state.upSound}
-          onFinishedPlaying={(() => this.setState({ upSound: 'STOPPED' }))}
-        />
-        <Sound
-          url="./sounds/fanfare.mp3"
-          playStatus={this.state.fanfareSound}
-          onFinishedPlaying={(() => this.setState({ fanfareSound: 'STOPPED' }))}
-        />
-      </div>
-    );
+    return <BrowserDetection>{browserHandler}</BrowserDetection>;
   }
 }
 

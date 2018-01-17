@@ -6,3 +6,7 @@
 button:hover {
   border-color: #FFC600 !important;
 }
+
+#root ~ div {
+  background-position: center !important;
+}
